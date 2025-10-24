@@ -7,8 +7,8 @@ const urlsToCache = [
   'index.html',
   'style.css',
   'script.js',
-  'images/icon-192x192.png', // Adicione todos os seus ícones e imagens
-  'images/icon-512x512.png'
+  'imagens/icon-192x192.png', // Adicione todos os seus ícones e imagens
+  'imagens/icon-512x512.png'
 ];
 
 // Evento 'install': Roda quando o Service Worker é instalado
@@ -38,4 +38,5 @@ self.addEventListener('fetch', (event) => {
       }
     )
   );
+
 });
