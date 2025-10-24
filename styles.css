@@ -1,0 +1,546 @@
+:root {
+    --cor-fundo: #f4f7f9;
+    --cor-painel: #ffffff;
+    --cor-borda: #e0e0e0;
+    --cor-principal: #42A5F5; /* Azul Suave */
+    --cor-principal-hover: #1E88E5;
+    --cor-texto: #333;
+    --cor-sombra: rgba(0, 0, 0, 0.08);
+    --cor-entrada: #A5D8FF;
+    --cor-saida: #FFAB91;
+    --cor-hospedado: #C8E6C9;
+    --cor-perigo: #dc3545;
+    --cor-perigo-hover: #c82333;
+  }
+
+  body {
+    font-family: 'Poppins', sans-serif; /* Nova Fonte */
+    background: var(--cor-fundo);
+    margin: 0;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .sidebar {
+    width: 350px;
+    flex-shrink: 0;
+    background: var(--cor-painel);
+    padding: 20px;
+    box-shadow: 4px 0 15px var(--cor-sombra);
+    z-index: 1000; /* Z-index alto para ficar sobre o overlay */
+    overflow-y: auto;
+    height: 100vh;
+    box-sizing: border-box;
+    border-right: 1px solid var(--cor-borda);
+    transition: transform 0.3s ease; /* Transição para o menu */
+  }
+  
+  .sidebar h1 {
+    font-size: 24px;
+    margin-top: 0;
+    margin-bottom: 30px;
+    text-align: center;
+    color: var(--cor-texto);
+  }
+
+  .content {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    height: 100vh;
+    box-sizing: border-box;
+    position: relative; /* Para o botão de menu */
+  }
+  
+  /* --- NOVOS ESTILOS PARA MENU HAMBURGUER E OVERLAY --- */
+  .menu-toggle {
+      display: none; /* Escondido no desktop */
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 1050;
+      background-color: var(--cor-principal);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      width: 48px;
+      height: 48px;
+      font-size: 24px;
+      padding: 0; /* Reset de padding */
+      margin: 0; /* Reset de margin */
+      justify-content: center;
+      align-items: center;
+  }
+  .menu-toggle i {
+      margin: 0; /* Reset de margem do ícone */
+  }
+  
+  #overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 999; /* Abaixo do sidebar, acima do conteúdo */
+  }
+  
+  #overlay.ativo {
+      display: block;
+  }
+  /* --- FIM DOS NOVOS ESTILOS --- */
+
+
+  @media (max-width: 900px) {
+    body {
+        flex-direction: column;
+        height: auto;
+        overflow: auto;
+    }
+    .sidebar {
+        /* Escondido por padrão no mobile */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 300px; /* Largura fixa para o menu */
+        max-width: 80%;
+        height: 100%;
+        box-shadow: 0 4px 10px var(--cor-sombra);
+        transform: translateX(-100%);
+    }
+    .sidebar.ativo {
+        transform: translateX(0); /* Mostra o menu */
+    }
+    .content {
+        height: auto;
+        overflow-y: visible;
+        padding-top: 70px; /* Espaço para o botão de menu fixo */
+    }
+    
+    /* Mostra o botão de menu */
+    .menu-toggle {
+        display: flex; 
+    }
+    
+    /* Otimização dos botões de navegação */
+    .navegacao-mes button {
+        font-size: 18px; /* Aumenta o ícone */
+        padding: 8px 12px; /* Ajusta padding */
+    }
+    .navegacao-mes button .texto-botao {
+        display: none; /* Esconde o texto */
+    }
+    .navegacao-mes button i {
+        margin: 0; /* Remove margem do ícone */
+    }
+
+    /* *** CORREÇÃO DO LAYOUT DO CALENDÁRIO *** */
+    #calendario-container {
+        flex-direction: column; /* Empilha as unidades */
+    }
+  }
+
+  /* --- ESTILOS DOS ELEMENTOS (mantidos) --- */
+  button, .dia {
+    min-width: 48px;
+    min-height: 48px;
+    font-size: 15px;
+    padding: 8px;
+    margin: 6px 0;
+    border-radius: 8px;
+  }
+  
+    .data-management h3,
+    .controls h3 {
+      color: var(--cor-texto);
+      border-bottom: 1px solid var(--cor-borda);
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+      font-weight: 500;
+    }
+    
+    .dropdown {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+    
+    .dropbtn {
+        width: 100%;
+        padding: 10px 15px;
+        font-size: 16px;
+        background-color: #6c757d;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+    }
+    .dropbtn:hover {
+        background-color: #5a6268;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f9f9f9;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 100;
+      width: 100%;
+      left: 0;
+      right: 0;
+      border: 1px solid var(--cor-borda);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .dropdown-content button {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      background-color: #f1f1f1;
+      border: none;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      font-size: 14px;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .dropdown-content button:hover {
+      background-color: #ddd;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    .file-operations {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .controls button, .file-operations > button {
+      padding: 10px 15px;
+      font-size: 15px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      background-color: var(--cor-principal);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      transition: background-color 0.3s ease;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .controls button:hover, .file-operations > button:hover {
+      background-color: var(--cor-principal-hover);
+    }
+
+    .controls button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    
+    .seguranca-ativada {
+      background-color: var(--cor-perigo) !important;
+    }
+    .seguranca-ativada:hover {
+      background-color: var(--cor-perigo-hover) !important;
+    }
+    
+    hr {
+      border: 0;
+      border-top: 1px solid var(--cor-borda);
+      margin: 20px 0;
+    }
+  .controls label,
+    .controls select,
+    .controls .checkbox-group {
+      font-size: 15px;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .controls select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+      margin-bottom: 15px;
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    .controls .checkbox-group {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .controls .checkbox-group input {
+      margin-right: 8px;
+    }
+
+    /* Ícones dentro dos botões */
+    button i {
+        margin-right: 8px;
+        font-size: 1.1em;
+    }
+    .dropdown-content button i {
+        font-size: 1.2em;
+    }
+    .dropdown[style*="width: auto;"] .dropbtn {
+        width: 48px;
+        height: 48px;
+        padding: 8px;
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .dropdown[style*="width: auto;"] .dropbtn i {
+        margin-right: 0;
+    }
+
+    /* --- ESTRUTURA DE CALENDÁRIO --- */
+    .navegacao-mes {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        background: var(--cor-painel);
+        padding: 10px 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px var(--cor-sombra);
+    }
+    .navegacao-mes h2 {
+        margin: 0;
+        font-size: 22px;
+        color: var(--cor-texto);
+    }
+    .navegacao-mes button {
+        padding: 8px 16px;
+        font-size: 15px;
+        background-color: var(--cor-principal);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+    }
+    .navegacao-mes button:disabled { background-color: #ccc; }
+    .navegacao-mes button:hover:not(:disabled) { background-color: var(--cor-principal-hover); }
+    .navegacao-mes button:last-child i { margin-right: 0; margin-left: 8px; }
+    
+    #calendario-container {
+        display: flex;
+        gap: 20px;
+        width: 100%;
+    }
+
+    .unidade-coluna {
+        flex: 1;
+        background: var(--cor-painel);
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px var(--cor-sombra);
+    }
+    
+    .dias {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+      gap: 5px;
+    }
+
+    .dia {
+      background: #e9ecef; 
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+      border-radius: 8px;
+      min-height: 60px;
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: none; 
+      border: 1px solid #dee2e6;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+    .dia:hover {
+        border-color: var(--cor-principal);
+    }
+    .dia.filtered-out { opacity: 0.3; }
+    .dia.filtered-in { transform: scale(1.05); box-shadow: 0 0 10px var(--cor-principal); border-color: var(--cor-principal); }
+    .dia.seguranca-ativada { cursor: not-allowed; opacity: 0.5; }
+    .dia strong { font-size: 14px; margin-bottom: 5px; font-weight: 500; }
+    .dia div { margin: 2px 0; font-size: 10px; line-height: 1.2; }
+    
+    .entrada { background-color: var(--cor-entrada) !important; border-color: #8ecfff !important; }
+    .saida { background-color: var(--cor-saida) !important; border-color: #ff8a65 !important; }
+    .hospedado { background-color: var(--cor-hospedado) !important; border-color: #a5d6a7 !important; }
+    .dupla { background: linear-gradient(135deg, var(--cor-saida) 50%, var(--cor-entrada) 50%) !important; }
+
+    .dia .bi { font-size: 1.1em; }
+    .icon-hospedado { color: #155724; }
+    .icon-entrada { color: #004085; }
+    .icon-saida { color: #721c24; }
+    .icon-troca { color: #856404; }
+
+
+    #tooltip { display: none; position: absolute; z-index: 9999; background: #fff; border: 1px solid #ccc; padding: 6px; font-size: 12px; white-space: nowrap; box-shadow: 2px 2px 5px rgba(0,0,0,0.2); pointer-events: none; border-radius: 8px; }
+    
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); z-index: 2000; display: flex; justify-content: center; align-items: center; }
+    .modal-content { background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); width: 90%; max-width: 700px; position: relative; }
+    .modal-close-btn { position: absolute; top: 10px; right: 15px; font-size: 28px; font-weight: bold; cursor: pointer; color: #555; }
+    .modal-content h3 { color: #555; border-bottom: 1px solid var(--cor-borda); padding-bottom: 10px; margin-bottom: 15px; }
+    .modal-tabs { display: flex; border-bottom: 1px solid #ccc; margin-bottom: 15px; }
+    .tab-btn { padding: 10px 15px; cursor: pointer; border: none; background-color: transparent; border-bottom: 3px solid transparent; font-size: 16px; }
+    .tab-btn.active { border-bottom: 3px solid var(--cor-principal); font-weight: bold; }
+    .report-content { display: none; }
+    .report-content.active { display: block; max-height: 60vh; overflow-y: auto; padding-right: 10px; }
+    
+    /* ESTILOS PARA O MÓDULO FINANCEIRO */
+    #listaReservasFinanceiro button { width: 100%; text-align: left; margin-bottom: 5px; background-color: #f1f1f1; border: 1px solid #ddd; }
+    .form-financeiro-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+    .form-financeiro-grid label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
+    .form-financeiro-grid input, .form-financeiro-grid select { width: 100%; padding: 8px; box-sizing: border-box; font-family: 'Poppins', sans-serif; border: 1px solid #ccc; border-radius: 8px; }
+    table.relatorio-financeiro { width: 100%; border-collapse: collapse; font-size: 12px; }
+    table.relatorio-financeiro th, table.relatorio-financeiro td { border: 1px solid #ddd; padding: 6px; text-align: left; }
+    table.relatorio-financeiro th { background-color: #f2f2f2; }
+    table.relatorio-financeiro tfoot { font-weight: bold; }
+    
+    /* CSS DO RELATÓRIO VISUAL (COMO NA VERSÃO ANTERIOR) */
+    .unidade-relatorio { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+    .unidade-relatorio:last-child { border-bottom: none; }
+    .unidade-relatorio h4 { color: var(--cor-principal); margin-top: 0; margin-bottom: 15px; text-align: center; }
+    .mes-relatorio { margin-bottom: 20px; }
+    .mes-relatorio h5 { text-align: center; margin: 5px 0 10px 0; font-weight: 500; color: #555; }
+    .dias-relatorio { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; font-size: 12px; }
+    .dia-relatorio { display: flex; justify-content: center; align-items: center; height: 30px; background-color: #f0f0f0; border-radius: 4px; border: 1px solid #ddd; }
+    .dia-relatorio.header { font-weight: bold; background-color: transparent; border: none; color: #666; }
+    .dia-relatorio.noite-ocupada { background-color: var(--cor-saida); color: #a22; font-weight: bold; border-color: #ff8a65; }
+    .dia-relatorio.troca { background-color: #ffc107; color: #7d5900; font-weight: bold; border-color: #ffb300; }
+    .dia-relatorio.checkout-apenas { background: linear-gradient(135deg, #f0f0f0 49%, #ffe8e8 51%); border-color: #fcc; }
+
+
+
+/* --- INÍCIO: ESTILOS PARA RELATÓRIO VISUAL (FALTANDO) --- */
+    .unidade-relatorio {
+      margin-bottom: 20px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 15px;
+    }
+    .unidade-relatorio:last-child {
+      border-bottom: none;
+    }
+    .unidade-relatorio h4 {
+      color: var(--cor-principal);
+      margin-top: 0;
+      margin-bottom: 15px; /* Adicionado espaço */
+      text-align: center; /* Centralizar título da unidade */
+    }
+    .mes-relatorio {
+        margin-bottom: 20px; /* Aumentado espaço entre meses */
+    }
+    .mes-relatorio h5 {
+        text-align: center;
+        margin: 5px 0 10px 0; /* Ajustado espaçamento */
+        font-weight: 500;
+        color: #555;
+    }
+    .dias-relatorio {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr); /* Define 7 colunas */
+        gap: 4px;
+        font-size: 12px;
+    }
+    .dia-relatorio {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 30px; /* Altura de cada célula */
+        background-color: #f0f0f0;
+        border-radius: 4px;
+        border: 1px solid #ddd; /* Borda sutil */
+    }
+    .dia-relatorio.header {
+        font-weight: bold;
+        background-color: transparent;
+        border: none; /* Sem borda no cabeçalho */
+        color: #666;
+    }
+    .dia-relatorio.noite-ocupada {
+        background-color: var(--cor-saida); /* Usa a cor de saída */
+        color: #a22;
+        font-weight: bold;
+        border-color: #ff8a65;
+    }
+    .dia-relatorio.troca {
+        background-color: #ffc107; /* Amarelo para troca */
+        color: #7d5900;
+        font-weight: bold;
+        border-color: #ffb300;
+    }
+    .dia-relatorio.checkout-apenas {
+        /* Metade fundo, metade cor de saída suave */
+        background: linear-gradient(135deg, #f0f0f0 49%, #ffe8e8 51%);
+        border-color: #fcc;
+    }
+    /* --- FIM: ESTILOS PARA RELATÓRIO VISUAL --- */
+
+    
+    @media print {
+      body > *:not(.modal-overlay) { display: none !important; }
+      .modal-overlay { position: relative; background: none; }
+      .modal-content { box-shadow: none; max-width: 100%; width: 100%; max-height: none; overflow-y: visible; }
+      .modal-close-btn, .modal-tabs, .print-btn, .modal-content h3 ~ div[style] { display: none !important; }
+    }
+
+    /* --- INÍCIO: ESTILOS PARA CONTROLE DE LIMPEZA --- */
+    #tabelaLimpeza .status-pendente {
+        color: #856404; /* Amarelo escuro */
+        font-weight: bold;
+    }
+    #tabelaLimpeza .status-concluida {
+        color: #155724; /* Verde escuro */
+        font-weight: bold;
+    }
+    #tabelaLimpeza button {
+        padding: 4px 8px;
+        font-size: 12px;
+        margin: 0;
+        width: auto;
+    }
+    #tabelaLimpeza .limpeza-editada {
+        background-color: #ffe6e6 !important;
+        border-left: 4px solid var(--cor-perigo) !important;
+    }
+    #tabelaLimpeza .limpeza-editada td {
+        color: var(--cor-perigo) !important;
+        font-weight: bold !important;
+    }
+    #tabelaLimpeza .icone-editada {
+        color: var(--cor-perigo);
+        margin-right: 5px;
+        animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+    /* --- FIM: ESTILOS PARA CONTROLE DE LIMPEZA --- */
