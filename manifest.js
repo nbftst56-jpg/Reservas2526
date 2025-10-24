@@ -9,14 +9,15 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "images/icon-192x192.png",
+      "src": "imagens/icon-192x192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "images/icon-512x512.png",
+      "src": "imagens/icon-512x512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
   ]
+
 }
